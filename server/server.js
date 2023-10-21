@@ -1,26 +1,24 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./database/db')
+const express = require('express')
+const cors = require('cors')
+require('./database/db')
 
-const constrollers = require('./controllers')
+// Importantando/requeriendo rutas
+const authRouter = require('./routes/auth')
+const userRouter = require('./routes/user')
 
-const app = express();
-const port = 6000;
+// Config
+const app = express()
+const port = 6000
 
-//middlewares
-app.use(express.json());
-app.use(cors());
+// Middlewares
+app.use(express.json())
+app.use(cors())
 
+// Rutas
+app.use(userRouter)
+app.use(authRouter)
 
-//las rutas
-app.get('/user/:userId', constrollers.getUserById);
-app.post('/register', constrollers.register);
-app.post('/login', constrollers.login);
-
-//escuchar al servidor
+// Escuchar al servidor
 app.listen(port, () => {
-    console.log(`El servidor se ha levantado en el puerto ${port}`);
-    db()
+  console.log(`El servidor se ha levantado en el puerto ${port}`)
 })
-
-module.exports = app;
