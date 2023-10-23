@@ -3,7 +3,7 @@
 import { Link } from 'react-router-dom'
 
 export const Login = () => {
-  
+
 
   return (
     <div className='h-vh'>
@@ -66,8 +66,8 @@ export const Login = () => {
 
   
       <div className=' w-11/12 md:w-3/5 lg:w-4/12 m-auto bg-blue-100 flex justify-between p-4 rounded-lg'>
-          <Link className='text-blue-600 hover:text-blue-800 transition-colors font-bold' to={'/registro'}>Crea una cuenta</Link>
-          <Link to={'/recuperarPassword'} className='text-slate-600 font-bold hover:text-slate-700 transition-colors '>Olvidé mi contraseña</Link>
+          <Link className='text-blue-600 hover:text-blue-800 transition-colors font-bold' to={'/register'}>Crea una cuenta</Link>
+          <Link to={'/recoverpassword'} className='text-slate-600 font-bold hover:text-slate-700 transition-colors '>Olvidé mi contraseña</Link>
       </div>
 
       <footer className='bg-gray-200 absolute w-full bottom-0 p-4'>

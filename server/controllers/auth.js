@@ -40,7 +40,7 @@ const register = async (req, res) => {
       return res.json({ msg: 'Todos los campos son olbigatorios' })
     }
 
-    const passwordHaseado = bcrypt.hash(password, 10)
+    const passwordHaseado = await bcrypt.hash(password, 10)
 
     const newUser = new User({
       name,
@@ -50,7 +50,11 @@ const register = async (req, res) => {
 
     await newUser.save()
 
-    return res.json({ msg: 'usuario creado correctamente', user })
+    return res.json({
+      msg: 'usuario creado correctamente',
+      newUser: { name, email }
+    })
+    
   } catch (error) {
     return res.json({ error })
   }

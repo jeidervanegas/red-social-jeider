@@ -3,13 +3,38 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import React from 'react'
 import { toast } from 'react-hot-toast'
+import Axios from'axios'
+import { useAuth } from '../../hooks/useAuth'
 
 export const Registro = () => {
+const { setUser } = useAuth()
+const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const formData = new FormData(e.target)
+
+    const email = formData.get('email');
+    const name = formData.get('name');
+    const phone = formData.get('phone');
+    const password = formData.get('password');
+
+    Axios.post('http://localhost:6001/register', {
+      email,
+      name,
+      phone,
+      password
+    })
+    //la data es la info que llega del servidot (api)
+    .then(data => {
+      setUser(data.newUser)
+      navigate('/inicio')
+    })
+    .catch(error => toast.error(error.msg || error.message))
   }
 
+  
 
   return (
     <>
