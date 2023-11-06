@@ -1,5 +1,6 @@
-const bcrypt = require('bcryptjs')
-const User = require('../model/user')
+const bcrypt = require('bcryptjs');
+const User = require('../model/user');
+const jwt = require('jsonwebtoken');
 
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -13,14 +14,11 @@ const login = async (req, res) => {
   const esCorrecto = await bcrypt.compare(password, user.password)
 
   if (esCorrecto) {
-    const { id, name } = user
+    const accessToken = await jwt.sign({uid: user._id}, '12345')
 
     return res.json({
       msg: 'Usuario logeado correctamente',
-      user: {
-        id,
-        name
-      }
+      accessToken
     })
   }
   return res.json({ msg: 'Contraseña incorrecta' })
@@ -40,7 +38,7 @@ const register = async (req, res) => {
       return res.json({ msg: 'Todos los campos son olbigatorios' })
     }
 
-    const passwordHaseado = bcrypt.hash(password, 10)
+    const passwordHaseado = await bcrypt.hash(password, 10)
 
     const newUser = new User({
       name,
@@ -49,8 +47,13 @@ const register = async (req, res) => {
     })
 
     await newUser.save()
+    const accessToken = await jwt.sign({uid: newUser._id}, '12345')
 
-    return res.json({ msg: 'usuario creado correctamente', user })
+    return res.json({
+      msg: 'usuario creado correctamente',
+      accessToken
+    })
+    
   } catch (error) {
     return res.json({ error })
   }

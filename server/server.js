@@ -8,7 +8,7 @@ const userRouter = require('./routes/user')
 
 // Config
 const app = express()
-const port = 6000
+const port = 6001
 
 // Middlewares
 app.use(express.json())
