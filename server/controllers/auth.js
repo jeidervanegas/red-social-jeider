@@ -26,6 +26,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { name, email, password } = req.body
+  
 
   try {
     const user = await User.findOne({ email })
@@ -33,6 +34,8 @@ const register = async (req, res) => {
     if (user) {
       return res.json({ msg: 'El usuario ya existe' })
     }
+
+    console.log({name, email, password})
 
     if (!name || !email || !password) {
       return res.json({ msg: 'Todos los campos son olbigatorios' })

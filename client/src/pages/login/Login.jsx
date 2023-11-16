@@ -1,8 +1,47 @@
-
-
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
+import { toast } from 'react-hot-toast'
+import { saveToken } from '../../utils/tokenManager'
 
 export const Login = () => {
+  const navigate = useNavigate()
+  const { user, getUser } = useAuth()
+
+  useEffect(() => {
+    if (user) { // STATUS USER: 1. null -> no ha iniciado sesion 2. undefined -> No lo sabemos (si esta o no esta iniciada la sesion) y el 3. object -> la sesion en un objecto.
+      navigate('/perfil')
+    }
+  }, [user])
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    const formData = new FormData(e.target)
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    fetch('http://localhost:6001/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })
+    })
+      .then(async res => {
+        const data = await res.json()
+        if (!res.ok) throw { ...res, data }
+        return data
+      })
+      .then((data) => {
+        saveToken(data.accessToken)
+        getUser(data.accessToken)
+      })
+      .catch(error => {
+        toast.error(error.data?.msg || error.message)
+      })
+  }
+
   
 
   return (
@@ -17,7 +56,7 @@ export const Login = () => {
         </div>
       </nav>
       <main>
-        <form >
+        <form onSubmit={handleSubmit}>
         {/* {//inciar session} */}
           <h2 className="text-center p-4 uppercase text-2xl text-blue-700 mt-20">
             Inicia Sessión
@@ -66,7 +105,7 @@ export const Login = () => {
 
   
       <div className=' w-11/12 md:w-3/5 lg:w-4/12 m-auto bg-blue-100 flex justify-between p-4 rounded-lg'>
-          <Link className='text-blue-600 hover:text-blue-800 transition-colors font-bold' to={'/registro'}>Crea una cuenta</Link>
+          <Link className='text-blue-600 hover:text-blue-800 transition-colors font-bold' to={'/register'}>Crea una cuenta</Link>
           <Link to={'/recuperarPassword'} className='text-slate-600 font-bold hover:text-slate-700 transition-colors '>Olvidé mi contraseña</Link>
       </div>
 

@@ -13,6 +13,7 @@ const port = 6001
 // Middlewares
 app.use(express.json())
 app.use(cors())
+app.use(express.urlencoded({extended:false}));
 
 // Rutas
 app.use(userRouter)

@@ -4,10 +4,28 @@ import imagenContacto from '../images/perfil/contacto.png'
 import imagenreferecnias from '../images/perfil/referencias.png'
 import imagenreRedes from '../images/perfil/redes.png'
 import imagenCarga from '../images/perfil/carga.png'
+import { useAuth } from '../../hooks/useAuth'
 
-import React from 'react'
+function Loading() {
+  return (
+    <h1>Cargando...</h1> 
+  ) 
+}
 
 export const Perfil = () => {
+  const { user } = useAuth()
+
+
+  if (user === undefined) return (
+    <Loading /> // placeholder: pagina de carga (precargador)
+  ) 
+  
+  if (user === null) return (
+    <h1>No ha iniciado sesion</h1> // aqui recomiendo redirecionar al Log In. (La logica para hacerlo esta en tu imaginacion xd)
+  )
+
+  console.log(user)
+
   return (
     <div className='bg-slate-100'>
       <nav className='bg-blue-500 py-2 px-6 mb-8  fixed w-full '>
@@ -35,8 +53,8 @@ export const Perfil = () => {
 
 
           <div className=''>
-            <div className='text-center mb-8'>
-              <h2 className='text-slate-600 font-bold uppercase'>Jieder gomez vanegas</h2>
+            <div className='text-center mb-8'></div>
+              <h2 className='text-slate-600 font-bold uppercase'>{user.name}</h2>
               <p className='text-slate-500'>Profesional en <span>Desarrollo de software</span></p>
             </div>
 
@@ -131,11 +149,6 @@ export const Perfil = () => {
           </div>
 
         </div>
-
-
      </div>
-
-
-  </div>              
   )
 }
